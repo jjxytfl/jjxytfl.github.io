@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   
+
   
   <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://example.com/index.html">
@@ -17,21 +18,14 @@
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
-    <link rel="shortcut icon" href="/vx.png">
+    <link rel="icon" href="\vx.png">
   
   
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
-
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   
 <link rel="stylesheet" href="/css/style.css">
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
-  
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
@@ -67,14 +61,49 @@
     </div>
   </div>
 </header>
-
       <div class="outer">
         <section id="main">
   
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <article id="post-leetcode-335" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/10/28/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2021-10-28T00:17:26.951Z" itemprop="datePublished">2021-10-28</time>
+    <a href="/2021/10/29/leetcode-335/" class="article-date">
+  <time datetime="2021-10-29T03:26:44.796Z" itemprop="datePublished">2021-10-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>这个题目其实可以分为两个状态，一个是困死的状态，一个是发散的状态</strong></p>
+<p>什么是困死的状态呢，假设有一个很长的路径数组，如果第三个小于第一个（可以想象一下），那么后面就是给自己困死的状态，即往那个方向都有限制了，且限制条件为dis[i]&lt;dis[i-2];</p>
+<p>发散的状态怎么得到呢，[1,2,3,4,5,6,7…]可以想象一下这个数组的路径，一个圈比一个圈大一直往外的这么一个状态;</p>
+<p><br>如果一直是第二种状态就一定不相交;</p>
+<blockquote>
+<p>:<em>（不会放图片，需要的同学可以用纸在旁边画一画）</em></p>
+</blockquote>
+<p>如果相交就要先转移到第一种状态，那么我们只需考虑怎样从第二种状态转移到第一种呢，假设有个数组[1,2,3,4,….]（下标从1开始），我们对dis[5]进行分情况讨论：1.如果dis[5]&gt;dis[3]此时为发散状态；dis[5]&lt;=dis[3]都会进入困死状态，但是还有点区别，区别在于第六条的限制条件：2.如果五条在第一条的那个高度，那么dis[6]的限制条件就是dis[6]&lt;dis[4]-dis[2]3.如果没到达第一条的高度,那么dis[6]的限制条件就为dis[6]&lt;dis[4],只要进入困死状态我们就只需要将后面的是否dis[i]&lt;dis[i-2]即可。</p>
+<p><strong>下面是代码部分</strong><br><br><br>\</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">	bool isSelfCrossing(vector&lt;int&gt;&amp; distance) &#123;</span><br><span class="line">		int n = distance.size();</span><br><span class="line">		if (n &lt; 4)return false;</span><br><span class="line">		int i = 4;</span><br><span class="line">		int t;</span><br><span class="line">		//处理前四个</span><br><span class="line">		if (distance[2] &lt;= distance[0])&#123;</span><br><span class="line">			t = distance[1];</span><br><span class="line">			if (isok(distance, 3, t))return true;</span><br><span class="line">			else return false;</span><br><span class="line">		&#125;</span><br><span class="line">		else&#123;</span><br><span class="line">			if (distance[3]&lt;distance[1])&#123;</span><br><span class="line">				t = distance[2];</span><br><span class="line">				if (isok(distance, 4, t))return true;</span><br><span class="line">				else return false;</span><br><span class="line">			&#125;</span><br><span class="line">			else if (distance[3] == distance[1])&#123;</span><br><span class="line">				t = distance[2] - distance[0];</span><br><span class="line">				if (isok(distance, 4, t))return true;</span><br><span class="line">				else return false;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		while (i &lt; n)&#123;</span><br><span class="line">			//是否要进入困死状态</span><br><span class="line">			if (distance[i] &lt;= distance[i - 2])&#123;</span><br><span class="line">				if (distance[i] &lt; distance[i - 2] - distance[i - 4])&#123;</span><br><span class="line">					t = distance[i - 1];</span><br><span class="line">				&#125;</span><br><span class="line">				else&#123;</span><br><span class="line">					t = distance[i - 1] - distance[i - 3];</span><br><span class="line">				&#125;</span><br><span class="line">				if (isok(distance, i + 1, t))return true;</span><br><span class="line">				else return false;</span><br><span class="line">			&#125;</span><br><span class="line">			i++;</span><br><span class="line">		&#125;</span><br><span class="line">		return false;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	bool isok(vector&lt;int&gt;&amp; distance, int i, int t)&#123;</span><br><span class="line">		if (i == distance.size())return false;</span><br><span class="line">		if (distance[i] &gt;= t)return true;</span><br><span class="line">		i++;</span><br><span class="line">		while (i &lt; distance.size())&#123;</span><br><span class="line">			if (distance[i] &gt;= distance[i - 2])&#123;</span><br><span class="line">				return true;</span><br><span class="line">			&#125;</span><br><span class="line">			i++;</span><br><span class="line">		&#125;</span><br><span class="line">		return false;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/10/29/leetcode-335/" data-id="ckveycjfr0000jsu9g4jwhkua" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-first-blog" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/10/28/first-blog/" class="article-date">
+  <time datetime="2021-10-28T02:18:51.000Z" itemprop="datePublished">2021-10-28</time>
 </a>
     
   </div>
@@ -85,13 +114,50 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/10/28/hello-world/">Hello World</a>
+      <a class="article-title" href="/2021/10/28/first-blog/">first_blog</a>
     </h1>
   
 
       </header>
     
-    <div class="e-content article-entry" itemprop="articleBody">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="first-blog"><a href="#first-blog" class="headerlink" title="first-blog"></a>first-blog</h2><p>陶飞龙你好</p>
+<img src="/vx.png" width="50%">
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/10/28/first-blog/" data-id="ckvacsvd900008su9codaghmw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/10/28/hello-world/" class="article-date">
+  <time datetime="2021-10-28T00:17:26.951Z" itemprop="datePublished">2021-10-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/28/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
       
         <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
@@ -110,15 +176,13 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/10/28/hello-world/" data-id="ckva9m58f0000c4u92ppc1biv" data-title="Hello World" class="article-share-link">Share</a>
-      
+      <a data-url="http://example.com/2021/10/28/hello-world/" data-id="ckvacsvde00018su98zd91nik" class="article-share-link">Share</a>
       
       
     </footer>
   </div>
   
 </article>
-
 
 
   
@@ -153,6 +217,14 @@
       <ul>
         
           <li>
+            <a href="/2021/10/29/leetcode-335/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/28/first-blog/">first_blog</a>
+          </li>
+        
+          <li>
             <a href="/2021/10/28/hello-world/">Hello World</a>
           </li>
         
@@ -168,13 +240,11 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      
       &copy; 2021 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
-
     </div>
     <nav id="mobile-nav">
   
@@ -185,19 +255,19 @@
 </nav>
     
 
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
   
-<script src="/fancybox/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 
 
 <script src="/js/script.js"></script>
-
 
 
 
